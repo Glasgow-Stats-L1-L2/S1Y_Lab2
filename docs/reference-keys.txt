@@ -1,0 +1,15 @@
+welcome-to-lab-2
+learning-outcomes
+part-1---exploring-crime-data
+plotting-the-data
+part-2---probability
+the-normal-distribution
+discrete-distributions
+binomial
+geometric
+poisson
+using-the-normal-distribution-to-approximate-a-binomial-distribution
+graphical-exploration
+group-exercises
+checking-the-normality-assumption
+heights-in-the-scottish-population

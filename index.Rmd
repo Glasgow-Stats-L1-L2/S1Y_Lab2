@@ -1,0 +1,58 @@
+---
+title: "S1Y Lab 2"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+biblio-style: apalike
+link-citations: yes
+---
+
+```{r setup, include = FALSE, eval = TRUE}
+library(webexercises)
+library(tinytex)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(tidyverse)
+library(openintro)
+library(infer)
+library(gridExtra)
+library(HistData)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r eval=FALSE, echo=FALSE}
+install.packages("bookdown")
+```
+
+```{r include=FALSE, echo=FALSE}
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
+
+# Welcome to Lab 2
+
+<br>
+
+<img src="images/nerd.jpg" width="300"/>
+
+<br>
+
+## Learning Outcomes 
+
+
+In this lab, you will investigate *probability* via simulation studies and learn how to compute probabilities from probability distributions. Particular focus will be given to the *Normal distribution*, which forms the core of many statistical analyses. You will learn how to generate random numbers and use graphical tools to assess whether data can be assumed normally distributed.
+
+The first part of this lab forms an extension to Lab 1 and part 2 is based on Chapters 3 & 4 of <a href="https://www.openintro.org/redirect.php?go=os4_tablet&referrer=/stat/os4.php#page=79">OpenIntro (from page 79)</a>. Feel free to refer back to the materials to help you within this lab. 
+You will explore and visualise the data using the packages `dplyr` and `ggplot2`, and you can use the following lines of code to install the packages once on your device, then load them in each session:
+
+```{r load-packages, eval = FALSE}
+#only needed once on your machine
+install.packages("dplyr") 
+install.packages("ggplot2")
+
+#needed everytime you open RStudio
+library(dplyr)
+library(ggplot2)
+```

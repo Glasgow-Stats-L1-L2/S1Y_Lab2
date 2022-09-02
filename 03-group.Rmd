@@ -1,0 +1,117 @@
+
+# Group Exercises
+
+<br>
+
+<img src="images/busy_bees.png" width="500"/>
+
+<br>
+
+In this group exercise, you will generate random samples from Normal distributions. You will then pretend the samples had been handed to you, and explore the samples visually to examine whether the normality assumption seems appropriate for the sample at hand. You might find this exercise helpful in the preparation for later parts of the course, where you will be given a sample or dataset and asked to check if the normality assumption is appropriate for some variable, before performing tests that assume an underlying Normal distribution. 
+
+In ``R``, you can generate random values from several probability distributions. F/or example, you can use the functions ``rbinom()`` and ``rgeom()`` to obtain random values from the Binomial and Geometric distributions, respectively. Similarly, you can obtain random values from a Normal distribution using the function ``rnorm()``. 
+
+Note: the function ``rnorm()`` returns random values from the specified probability distribution, so your results of the following simulation study will vary every time you run the code. The questions for this exercise are based on a seed of 1 (setting a seed allows for reproducibility of results obtained from random functions), which is done via the command ``set.seed(1)``, which you should run before each random function in this exercise to ensure you can get to the correct answers. 
+
+For example, in the code below you will see that the results differ if you do not set a seed but that repeated trials lead to the same result if you use the same seed:
+
+```{r set_seed, eval = TRUE}
+set.seed(1)
+rnorm(n=5,mean=3,sd=1)
+
+#here, no seed was specified, so the result is different:
+rnorm(n=5,mean=3,sd=1)
+
+#using the same seed as before leads to the same result
+set.seed(1)
+rnorm(n=5,mean=3,sd=1)
+```
+
+<br>
+
+## Checking the normality assumption
+
+
+<br>
+
+**1. Generate 30 values from a Normal distribution with mean $\mu=10$ and variance $\sigma^{2}=4$. Then, create a boxplot for your sample. Remember to set a seed of 1 before running the function.**
+
+<br>
+
+**2. Imagine you were handed the sample without being told that it was generated from a Normal distribution. Based on the boxplot, would you say that the sample approximately follows a Normal distribution?**
+
+```{r, echo = FALSE}
+q_group1 <- sample(c(
+         answer = "The boxplot shows that the median is closer to the third quartile than to the first. However, the boxplot looks roughly symmetric and hence, the normality assumption seems appropriate.",
+         "The minimum is further away from the median than the maximum. Hence, the sample does not seem to be symmetric and thus, it appears that the normality assumption is violated.",
+         "The boxplot suggests it is unlikely that the majority of observations fall within one standard deviation of the mean. Hence, the normality assumption seems to be violated.")
+)
+```
+
+`r longmcq(q_group1)`
+
+<br>
+
+**3. Next, create a histogram to get a better idea of the shape of the distribution. You might have to change the binwidth to get a better plot.**
+
+<br>
+
+**4. Based on the histogram, would you say that the sample approximately follows a Normal distribution?**
+
+```{r, echo = FALSE}
+q_group2 <- sample(c(
+         answer = "The lower tail of the distribution is slightly heavier than the upper tail. However, the data closer to the mode of the distribution seem roughly symmetric and hence, the normality assumption isn't violated.",
+         "The sample contains many very small values which make it unlikely that the data follow a Normal distribution.",
+         "It doesn't look like the majority of data fall within one standard deviation of the mean. Hence, the normality assumption seems to be violated.")
+)
+```
+
+`r longmcq(q_group2)`
+
+<br>
+
+## Heights in the Scottish population
+
+<br>
+
+In Scotland, the average height for females is 161.3cm while that of males is 175cm. The standard deviation is approximately 6cm for females and 7cm for males. 
+
+**5. Based on this information, generate a random sample of the heights of 20 Scottish females and 20 Scottish males (remember to set a seed of 1 before you evaluate each function). Then, create a boxplot for the heights of the 40 people in the sample.**
+
+<br>
+
+**6. Imagine you were handed the sample without being told that it was generated from a Normal distribution. Based on the boxplot, would you say that the sample approximately follows a Normal distribution?**
+
+```{r, echo = FALSE}
+q_group3 <- sample(c(
+         answer = "The boxplot looks roughly symmetric and hence, the normality assumption seems appropriate.",
+         "The boxplot does not look symmetric, as the third quartile is further away from the median than the fist. Hence, the normality assumption seems violated.",
+         "It doesn't look like the majority of data fall within one standard deviation of the mean. Hence, the normality assumption seems to be violated.")
+)
+```
+
+`r longmcq(q_group3)`
+
+<br>
+
+**7. As before, create a histogram to get a better idea of the shape of the distribution. You might have to change the binwidth to get a better plot.**
+
+<br>
+
+**8. Based on the histogram, would you say that the sample approximately follows a Normal distribution?**
+
+```{r, echo = FALSE}
+q_group4 <- sample(c(
+         answer = "The Normal distriution is unimodal and symmetric. The sample is not symmetric around a single mode and hence, the normality assumption seems violated.",
+         "There are too many observations far below the median. Hence, the distribution does not look symmetric and the normality assumption seems violated.",
+         "The sample is roughly symmetric. Hence, the normality assumption seems appropriate.")
+)
+```
+
+`r longmcq(q_group4)`
+
+<br>
+
+Hopefully, this exercise gave you a first idea on how to check the appropriateness of assuming normality of a sample. Also, you saw that it might be helpful considering different plots when evaluating whether the normality assumption is appropriate.
+
+

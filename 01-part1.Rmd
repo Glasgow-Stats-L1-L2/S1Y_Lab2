@@ -1,0 +1,410 @@
+
+# Part 1 - Exploring crime data
+
+<br>
+
+<img src="images/crime.jpg" width="300"/>
+
+<br>
+
+Here, you will look at crime data from the British Crime Survey (2007-2008). In practice, such data might be helpful to identify groups in the population who are particularly vulnerable to crime, or draw inference for city planners to find ways of making citizens feel more safe. Formal hypothesis tests for differences in proportions for different groups will be introduced later in the semester, but here you will get an idea how to formulate hypotheses in the first place. 
+
+To get started, save the data in the same folder as the `R` file you use to work on this lab (in `RStudio`), then use the following lines of code to set your working directory to that folder and load the data:
+
+```{r load-data, eval = FALSE}
+#set working directory to source file location 
+#(that is the folder where you saved your R file)
+setwd(...)
+```
+
+```{r load-data2, eval = TRUE}
+#load the RDS file:
+crimedata <- readRDS("crimedata.rds")
+```
+
+Get an impression of the dataset by looking at the first 6 rows. Recall that you can do that by calling the function ``head()``:
+
+```{r head-data, eval = FALSE}
+head(crimedata)
+```
+
+Most variables in the dataset should be easily interpretable, but here is a brief explanation for some of the less intuitive ones:
+
+• **deprivation quintile** : Index of multiple deprivation by quintile in England (1=20% most deprived wards)
+	
+• **walkdark** : Answer to the question "How safe do you feel walking alone after dark?".
+
+• **wburgl** : Answer to the question "How worried are you about having your home broken into?".
+
+• **wmugged** : Answer to the question "How worried are you about being mugged and robbed?". 
+
+• **victim** : Indicates whether or not someone was a victim of crime in the last 12 months. 
+
+Take a closer look at the crime dataset, then answer the following questions...
+
+<br>
+
+**What type of variable is age?**
+
+`r hide("Hint")`
+
+Here, age is recorded in full years.
+
+`r unhide()`
+
+```{r, echo = FALSE}
+q_age <- sample(c(
+   "Numerical, continuous",
+   answer = "Numerical, discrete",
+   "Categorical, nominal",
+   "Categorical, ordinal")
+)
+```
+
+`r longmcq(q_age)`
+
+<br>
+
+**What type of variable is ethnicity?**
+
+`r hide("Hint")`
+
+There are different groups of ethnicities and it is not plausible to put them in a particular ranking.
+
+`r unhide()`
+
+```{r, echo = FALSE}
+q_eth <- sample(c(
+   "Numerical, continuous",
+   "Numerical, discrete",
+   answer = "Categorical, nominal",
+   "Categorical, ordinal")
+)
+```
+
+`r longmcq(q_eth)`
+
+<br>
+
+**What type of variable is years_in_area?**
+
+`r hide("Hint")`
+
+There are different groups, and they can be ranked (for example, someone who lived in an area "10 years but less than 20 years" has lived there longer than someone who has lived there "2 years but less than 3 years").
+
+`r unhide()`
+
+```{r, echo = FALSE}
+q_years <- sample(c(
+   "Numerical, continuous",
+   "Numerical, discrete",
+   "Categorical, nominal",
+   answer = "Categorical, ordinal")
+)
+```
+
+`r longmcq(q_years)`
+
+<br>
+
+**What type of variable is sex?**
+
+`r hide("Hint")`
+
+There are two sexes (female, male) and it is not plausible to put them in a particular ranking. 
+
+`r unhide()`
+
+```{r, echo = FALSE}
+q_sex <- sample(c(
+   "Numerical, continuous",
+   "Numerical, discrete",
+   answer = "Categorical, nominal",
+   "Categorical, ordinal")
+)
+```
+
+`r longmcq(q_sex)`
+
+<br>
+
+**What type of variable is walkdark?**
+
+`r hide("Hint")`
+
+There are different groups and they can be ranked. For example, someone who feels "very unsafe" walking alone after dark feels less safe than someone who feels "a bit unsafe".
+
+`r unhide()`
+
+```{r, echo = FALSE}
+q_walk <- sample(c(
+   "Numerical, continuous",
+   "Numerical, discrete",
+   "Categorical, nominal",
+   answer = "Categorical, ordinal")
+)
+```
+
+`r longmcq(q_walk)`
+
+<br>
+
+The data contain 10,427 observations, which are responses from individuals to 11 questions. Since the dataset is fairly large, you can create plots to get an impression of the data and then compute frequencies as a best guess to the underlying probabilities for a first informal check of possible associations between variables.
+
+## Plotting the data
+
+You might be interested in how safe people feel walking alone after dark. You can create a barplot for that variable by writing the code below:
+
+```{r plot_walkdark, eval = TRUE}
+ggplot(data=crimedata,aes(walkdark)) + geom_bar() + xlab("How safe do you feel about walking alone after dark?") + ylab("Count")
+```
+
+A lot of people seem to feel at least fairly safe when walking alone after dark, but how does that response look like for different groups of people? Below is an example showing you how to separate the responses by sex:
+
+```{r plot_walkdark_sex, eval = TRUE}
+ggplot(data=crimedata,aes(walkdark,fill=sex)) + geom_bar(position="dodge") + xlab("How safe do you feel about walking alone after dark?") + ylab("Count")
+```
+
+Note that in the code above, the function `geom_bar()` creates a barplot and the argument `position="dodge"` specifies that the bars are supposed to appear side-by-side. Choosing `position="fill"` would give you a stacked barplot instead. 
+
+<br>
+
+**How do you interpret the barplot of responses to walking alone after dark, by females and males?**
+
+```{r, echo = FALSE}
+q_safe <- sample(c(
+         answer = "Females tend to feel less safe than males walking alone after dark.",
+         "Males tend to feel less safe than females walking alone after dark.",
+         "The two sexes seem to feel similar about walking alone after dark.")
+)
+```
+
+`r longmcq(q_safe)`
+
+<br>
+
+Note that the plot shows the counts for each sex side-by-side. Since the number of female and male respondents might not be the same, it would be useful to know how many of each sex responded to the survey. You can find out via the function `table()`, as presented below:
+
+```{r table_sex, eval = TRUE}
+table(crimedata$sex)
+```
+
+The survey contains quite a few more responses from females than males. Hence, the following plot might give a better insight to how the two sexes feel about walking alone after dark:
+```{r plot_walkdark_sex2, eval = TRUE}
+#the argument position="fill" gives you a stacked barplot
+ggplot(data=crimedata,aes(sex,fill=walkdark)) + geom_bar(position="fill") + xlab("Sex") + ylab("Count") + ggtitle("How safe do you feel walking alone after dark?") + labs(fill='')
+```
+
+<br>
+
+Now, you can repeat the steps above for the variables `deprivation_quintile`, `years_in_area`, `marital_status` and `urban_rural`, then answer the questions below.
+
+<br>
+
+**How would you describe a possible relationship between the deprivation quantiles and how safe people feel walking alone after dark?**
+
+```{r, echo = FALSE}
+q_dep <- sample(c(
+         answer = "It seems that the more deprived an area is, the more unsafe people feel about walking alone after dark.",
+         "It seems that the less deprived an area is, the more unsafe people feel about walking alone after dark.",
+         "There is no apparent relationship between deprivation and how safe people feel walking alone after dark.")
+)
+```
+
+`r longmcq(q_dep)`
+
+<br>
+
+`r hide("Solution")`
+```{r hint1, eval = FALSE}
+
+ggplot(data=crimedata,aes(deprivation_quintile,fill=walkdark)) + geom_bar(position="fill") +
+  xlab("Deprivation Quintile") + ylab("Count") +
+  labs(fill='') + ggtitle("How safe do you feel walking alone after dark?") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```  
+`r unhide()`
+
+<br>
+
+**How would you describe a possible relationship between the number of years people have lived in an area and how safe they feel walking alone after dark?**
+
+```{r, echo = FALSE}
+q_year <- sample(c(
+         answer = "There is no apparent relationship between the number of years lived in an area and how safe people feel walking alone after dark.",
+         "It seems that the longer a person has lived in an area, the less safe they feel about walking alone after dark.",
+         "It seems that the longer a person has lived in an area, the more safe they feel about walking alone after dark.")
+)
+```
+
+`r longmcq(q_year)`
+
+<br>
+
+`r hide("Solution")`
+```{r hint2, eval = FALSE}
+
+ggplot(data=crimedata,aes(years_in_area,fill=walkdark)) + geom_bar(position="fill") +
+  xlab("Years in the area") + ylab("Count") +
+  labs(fill='') + ggtitle("How safe do you feel walking alone after dark?")
+```  
+`r unhide()`
+
+<br>
+
+**What can you say about possible relationships between a person's marital status and how safe they feel walking alone after dark?**
+
+```{r, echo = FALSE}
+q_mrg <- sample(c(
+         answer = "It seems that widowed people might feel more unsafe than the other groups.",
+         "It seems that single people feel more safe than the other groups.",
+         "It seems that married people feel more unsafe than single people.",
+         "There are no apparent differences by marital status for how safe people feel walking alone after dark.")
+)
+```
+
+`r longmcq(q_mrg)`
+
+<br>
+
+`r hide("Solution")`
+```{r hint3, eval = FALSE}
+
+ggplot(data=crimedata,aes(marital_status,fill=walkdark)) + geom_bar(position="fill") +
+  xlab("Marital Status") + ylab("Count") +
+  labs(fill='') + ggtitle("How safe do you feel walking alone after dark?")
+```  
+`r unhide()`
+
+<br>
+
+**How do urban and rural areas compare for how safe people feel walking alone after dark?**
+
+```{r, echo = FALSE}
+q_urb <- sample(c(
+         answer = "It seems that people in rural areas feel more safe.",
+         "It seems that people in urban areas feel more safe.",
+         "People in urban and rural areas feel similarly safe walking alone after dark.")
+)
+```
+
+`r longmcq(q_urb)`
+
+<br>
+
+`r hide("Solution")`
+```{r hint4, eval = FALSE}
+
+ggplot(data=crimedata,aes(urban_rural,fill=walkdark)) + geom_bar(position="fill") +
+  xlab("Urban/Rural") + ylab("Count") +
+  labs(fill='') + ggtitle("How safe do you feel walking alone after dark?")
+```  
+`r unhide()`
+
+<br>
+
+To compare responses by group, it might be helpful to obtain numerical summaries. For example, the code below shows you the number of males and females who live in urban and rural areas, respectively.
+
+```{r table_function, eval = TRUE}
+table(crimedata$sex,crimedata$urban_rural)
+```
+
+You can compute frequencies from the table above using the following code:
+
+```{r table_freq, eval = TRUE}
+sexurb <- table(crimedata$sex,crimedata$urban_rural)
+#proportion of males living in urban areas: 
+#value from first row and column, divided by sum of first row
+sexurb[1,1]/sum(sexurb[1,])
+#proportion of females living in urban areas:
+sexurb[2,1]/sum(sexurb[2,])
+```
+
+Alternatively, you can first split the data into different groups and then compute the frequencies for the different datasets:
+
+```{r freq_dplyr, eval = TRUE}
+#create a dataset for females only
+fem <- crimedata %>% filter(sex=="female")
+#then divide the number of females living in urban areas by the number of females in total
+sum(fem$urban_rural=="urban")/nrow(fem)
+```
+
+<br>
+
+**You randomly select an individual from the crime data. What is the probability that the individual is married? (Round to 4 decimal places)**
+
+`r hide("Hint")`
+
+Since you select the individual randomly, this probability is the same as the number of married individuals, divided by the total number of individuals.
+
+`r unhide()`
+
+`r fitb(0.4753)`
+
+`r hide("Solution")`
+
+```{r sol1, eval = TRUE}
+#solution
+marital <- table(crimedata$marital_status)
+#probability of randomly selected individual being married:
+marital[1]/sum(marital)
+```
+
+`r unhide()`
+
+<br>
+
+**You randomly select a female from the crime data. What is the probability she is feeling very unsafe walking alone after dark?**
+
+`r hide("Hint")`
+
+You randomly select an individual and you already know that the individual is female. Hence, the probability of her feeling very unsafe is the same as the proportion of females who feel very unsafe walking alone after dark.
+
+`r unhide()`
+
+`r fitb(0.1728)`
+
+`r hide("Solution")`
+
+```{r sol2, eval = TRUE}
+#solution
+femdark <- table(crimedata$sex,crimedata$walkdark)
+#probability of randomly selected female feeling very unsafe:
+femdark[2,1]/sum(femdark[2,])
+```
+
+`r unhide()`
+
+<br>
+
+**Compute the proportions of widowed females and widowed males who feel very unsafe walking alone after dark. Without performing a formal hypothesis test, would you suggest that these proportions differ substantially?**
+
+```{r, echo = FALSE}
+q_widow <- sample(c(
+         answer = "Yes, the proportion of people who feel very unsafe walking alone after dark appears to be higher in widowed females than widowed males.",
+         "Yes, the proportion of people who feel very unsafe walking alone after dark appears to be higher in widowed males than widowed females.",
+         "No, the proportions are about the same.")
+)
+```
+
+`r longmcq(q_widow)`
+
+<br>
+
+`r hide("Solution")`
+
+```{r sol3, eval = TRUE}
+#solution to the multiple choice question above
+femwidowed <- crimedata %>% filter(sex=="female" & marital_status=="widowed")
+#proportions of widowed females feeling very unsafe walking alone after dark
+sum(femwidowed$walkdark=="very unsafe")/nrow(femwidowed)
+
+malwidowed <- crimedata %>% filter(sex=="male" & marital_status=="widowed")
+#proportions of widowed females feeling very unsafe walking alone after dark
+sum(malwidowed$walkdark=="very unsafe")/nrow(malwidowed)
+```
+
+`r unhide()`
+
+<br>
+
+Hopefully, this part of the lab gave you some good ideas how to use plots to gain insights for a given dataset. If you want, you can explore the crime data further by checking possible associations between other variables in the data.
