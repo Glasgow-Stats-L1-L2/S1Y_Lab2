@@ -299,6 +299,13 @@ qbinom(p=0.9,size=40,prob=0.2)
 
 ### Geometric
 
+In the lecture (and in OpenIntro), the probability mass function of the Geometric distribution is defined as $$P(X=n)=(1-p)^{n-1}p,$$
+providing the probability of finding the first success in the nth trial.
+
+Note that in `R`, the probability mass function of the Geometric distribution is defined as
+$$P(X=n)=(1-p)^{n}p,$$
+i.e. the probability of seeing $n$ trials before the first success. Hence, you should either compute the probabilities for the Geometric distribution "by hand", or interpret the problem correctly when using `R`. The solutions below provide either version of computing the probabilities. 
+
 <br>
 
 **For $X$~Geometric$(p=0.2)$, what is $P(X=3)$? (Round to 4 decimal places)** 
@@ -316,7 +323,8 @@ dgeom(x=?,prob=?)
 `r hide("Solution")`
 
 ```{r probhint11}
-dgeom(x=3,prob=0.2)
+0.8^2*0.2 #by hand
+dgeom(x=2,prob=0.2) #using dgeom()
 ```
 
 `r unhide()`
@@ -338,8 +346,9 @@ pgeom(q=?,prob=?)
 `r hide("Solution")`
 
 ```{r probhint12}
+1-0.98^19 #by hand
 #P(X<20)=P(X≤19) for discrete variables
-pgeom(q=19,prob=0.02)
+pgeom(q=18,prob=0.02) #using pgeom()
 ```
 
 `r unhide()`
@@ -361,8 +370,9 @@ What is the complementary event of $X>4$?
 `r hide("Solution")`
 
 ```{r probhint13}
+0.98^4 #by hand: P(X>4) is equal to the probability of seeing 4 failures on the first 4 trials.
 #P(X>4)=1-P(X≤4)
-1-pgeom(q=4,prob=0.02)
+1-pgeom(q=3,prob=0.02) #using pgeom()
 ```
 
 `r unhide()`
@@ -384,15 +394,16 @@ pgeom(q=?,prob=?)-pgeom(q=?,prob=?)
 `r hide("Solution")`
 
 ```{r probhint14}
+0.98^4-0.98^19 #P(X>4)-P(X≥20)
 #P(4<X<20)
-pgeom(q=19,prob=0.02)-pgeom(q=4,prob=0.02)
+pgeom(q=18,prob=0.02)-pgeom(q=3,prob=0.02) #using pgeom()
 ```
 
 `r unhide()`
 
 <br>
 
-**For $X$~Geometric$(p=0.005)$, what is what is the 98th percentile? (As a whole number).** 
+**For $X$~Geometric$(p=0.005)$, what is the 98th percentile? (As a whole number).** 
 
 `r hide("Hint")`
 
@@ -400,14 +411,14 @@ qgeom(p=?,prob=?)
 
 `r unhide()`
 
-`r fitb(780)`
+`r fitb(781)`
 
 <br>
 
 `r hide("Solution")`
 
 ```{r probhint15}
-qgeom(p=0.98,prob=0.005)
+qgeom(p=0.98,prob=0.005)+1 #recall that qgeom() gives us the percentile for trials before first success, not until first success (where the successful trial is inclded in the total number of trials)
 ```
 
 `r unhide()`
