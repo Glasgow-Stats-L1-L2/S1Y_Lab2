@@ -45,14 +45,21 @@ knitr::write_bib(c(
 In this lab, you will investigate *probability* via simulation studies and learn how to compute probabilities from probability distributions. Particular focus will be given to the *Normal distribution*, which forms the core of many statistical analyses. You will learn how to generate random numbers and use graphical tools to assess whether data can be assumed normally distributed.
 
 The first part of this lab forms an extension to Lab 1 and part 2 is based on Chapters 3 & 4 of <a href="https://www.openintro.org/redirect.php?go=os4_tablet&referrer=/stat/os4.php#page=79">OpenIntro (from page 79)</a>. Feel free to refer back to the materials to help you within this lab. 
-You will explore and visualise the data using the packages `dplyr` and `ggplot2`, and you can use the following lines of code to install the packages once on your device, then load them in each session:
+You will explore and visualise the data using the packages `dplyr` and `ggplot2`. On the lab PCs copy/paste/run the following lines of code in your R Script file in RStudio to load the libraries for this session:
 
 ```{r load-packages, eval = FALSE}
-#only needed once on your machine
-install.packages("dplyr") 
-install.packages("ggplot2")
-
-#needed everytime you open RStudio
 library(dplyr)
 library(ggplot2)
 ```
+
+<!-- , and you can use the following lines of code to install the packages once on your device, then load them in each session: -->
+
+<!-- ```{r load-packages, eval = FALSE} -->
+<!-- #only needed once on your machine -->
+<!-- install.packages("dplyr")  -->
+<!-- install.packages("ggplot2") -->
+
+<!-- #needed everytime you open RStudio -->
+<!-- library(dplyr) -->
+<!-- library(ggplot2) -->
+<!-- ``` -->
